@@ -5,15 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.ws.rs.HttpMethod;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class ApiModel<PK extends Serializable> {
@@ -41,8 +39,17 @@ abstract class ApiModel<PK extends Serializable> {
 	@Getter
 	private transient String className;
 
+	/**
+	 * {@link Collection} de atributos que tiveram seus valores alterados.
+	 */
+	private transient final Map<String, Object> filters = new HashMap<>();
+
 	public ApiModel() {
 		className = getClass().getSimpleName().toLowerCase();
+	}
+
+	void resetFilters() {
+		filters.clear();
 	}
 
 	void copy(final ApiModel<PK> other) {
@@ -56,6 +63,19 @@ abstract class ApiModel<PK extends Serializable> {
 		if (getId() == null) {
 			throw new IllegalArgumentException("The Object ID must be set in order to use this method.");
 		}
+	}
+
+	/**
+	 * Valida se o atributo {@link #id} foi preenchido.
+	 */
+	protected void validateIdFilters() {
+		if (filters == null || filters.isEmpty()) {
+			throw new IllegalArgumentException("No filter criteria defined.");
+		}
+	}
+
+	void addFilter(@NonNull String query, @NonNull Object value) {
+		filters.put(query, value);
 	}
 
 	/**
@@ -88,23 +108,36 @@ abstract class ApiModel<PK extends Serializable> {
 		return new ApiRequest(HttpMethod.GET, path).execute();
 	}
 
+	protected JsonArray query() throws ApiException {
+		validateIdFilters();
+		final String path = String.format("/%s", className);
+
+		try {
+			final ApiRequest request = new ApiRequest(HttpMethod.GET, path);
+			request.setParameters(filters);
+
+			final JsonObject response = request.execute();
+			return response.getAsJsonArray("results");
+		} catch (ApiException e) {
+			return new JsonArray();
+		}
+	}
+
 	/**
 	 * @param page
 	 * @return
 	 * @throws ApiException
 	 */
 	protected JsonArray next(Integer page) throws ApiException {
-		final Map<String, Object> parameters = new HashMap<>();
-
 		if (null == page || 0 >= page) {
 			page = 1;
 		}
 
-		parameters.put("page", page);
+		filters.put("page", page);
 
 		try {
 			final ApiRequest request = new ApiRequest(HttpMethod.GET, String.format("/%s", className));
-			request.getParameters().putAll(parameters);
+			request.setParameters(filters);
 
 			final JsonObject response = request.execute();
 			return response.getAsJsonArray("results");

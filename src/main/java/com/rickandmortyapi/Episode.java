@@ -60,6 +60,16 @@ public class Episode extends ApiModel<Integer> {
 		setId(id);
 	}
 
+	public Episode withName(String name) {
+		addFilter("name", name);
+		return this;
+	}
+
+	public Episode withNumber(String number) {
+		addFilter("episode", number);
+		return this;
+	}
+
 	public Episode refresh() throws ApiException {
 		final Episode other = Jsons.asObject(refreshModel(), Episode.class);
 		copy(other);
@@ -68,6 +78,10 @@ public class Episode extends ApiModel<Integer> {
 
 	public Collection<Episode> get(Integer... ids) throws ApiException {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
+	}
+
+	public Collection<Episode> filter() throws ApiException {
+		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
 	public Collection<Episode> list() throws ApiException {

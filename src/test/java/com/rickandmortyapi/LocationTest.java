@@ -33,6 +33,17 @@ public class LocationTest {
 	}
 
 	@Test
+	public void testFilter_withEarthPlanet() throws Throwable {
+		location.withName("Earth")
+				.withType("Planet")
+				.filter()
+				.forEach(character -> {
+					assertTrue(character.getName().contains("Earth"));
+					assertEquals("Planet", character.getType());
+				});
+	}
+
+	@Test
 	public void testList_withPage2() throws Throwable {
 		final Collection<Location> locations = location.list(2);
 		assertFalse(locations.isEmpty());

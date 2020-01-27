@@ -34,6 +34,17 @@ public class CharacterTest {
 	}
 
 	@Test
+	public void testFilter_withRickAlive() throws Throwable {
+		character.withName("rick")
+				.withStatus(Character.Status.ALIVE)
+				.filter()
+				.forEach(character -> {
+					assertTrue(character.getName().contains("Rick"));
+					assertEquals(Character.Status.ALIVE, character.getStatus());
+				});
+	}
+
+	@Test
 	public void testList_withPage2() throws Throwable {
 		final Collection<Character> characters = character.list(2);
 		assertFalse(characters.isEmpty());

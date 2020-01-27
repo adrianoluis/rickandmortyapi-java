@@ -57,6 +57,21 @@ public class Location extends ApiModel<Integer> {
 		setId(id);
 	}
 
+	public Location withName(String name) {
+		addFilter("name", name);
+		return this;
+	}
+
+	public Location withType(String type) {
+		addFilter("type", type);
+		return this;
+	}
+
+	public Location withDimension(String dimension) {
+		addFilter("dimension", dimension);
+		return this;
+	}
+
 	public Location refresh() throws ApiException {
 		final Location other = Jsons.asObject(refreshModel(), Location.class);
 		copy(other);
@@ -65,6 +80,10 @@ public class Location extends ApiModel<Integer> {
 
 	public Collection<Location> get(Integer... ids) throws ApiException {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
+	}
+
+	public Collection<Location> filter() throws ApiException {
+		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
 	public Collection<Location> list() throws ApiException {

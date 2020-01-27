@@ -33,6 +33,17 @@ public class EpisodeTest {
 	}
 
 	@Test
+	public void testFilter_withPilotS01E01() throws Throwable {
+		episode.withName("Pilot")
+				.withNumber("S01E01")
+				.filter()
+				.forEach(character -> {
+					assertTrue(character.getName().contains("Pilot"));
+					assertEquals("S01E01", character.getNumber());
+				});
+	}
+
+	@Test
 	public void testList_withPage2() throws Throwable {
 		final Collection<Episode> episodes = episode.list(2);
 		assertFalse(episodes.isEmpty());

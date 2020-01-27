@@ -82,6 +82,31 @@ public class Character extends ApiModel<Integer> {
 		setId(id);
 	}
 
+	public Character withName(String name) {
+		addFilter("name", name);
+		return this;
+	}
+
+	public Character withStatus(Status status) {
+		addFilter("status", status);
+		return this;
+	}
+
+	public Character withSpecies(String species) {
+		addFilter("species", species);
+		return this;
+	}
+
+	public Character withType(String type) {
+		addFilter("type", type);
+		return this;
+	}
+
+	public Character withGender(Gender gender) {
+		addFilter("gender", gender);
+		return this;
+	}
+
 	public Character refresh() throws ApiException {
 		final Character other = Jsons.asObject(refreshModel(), Character.class);
 		copy(other);
@@ -90,6 +115,10 @@ public class Character extends ApiModel<Integer> {
 
 	public Collection<Character> get(Integer... ids) throws ApiException {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
+	}
+
+	public Collection<Character> filter() throws ApiException {
+		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
 	public Collection<Character> list() throws ApiException {
