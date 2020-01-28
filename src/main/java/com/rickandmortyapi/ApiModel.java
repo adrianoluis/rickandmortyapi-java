@@ -16,32 +16,20 @@ import java.util.stream.Collectors;
 
 abstract class ApiModel<PK extends Serializable> {
 
-	/**
-	 * Model identification number
-	 */
 	@Expose(serialize = false)
 	@Getter
 	@Setter
 	@SerializedName("id")
 	private PK id;
 
-	/**
-	 * Time at which the model was created in the database.
-	 */
 	@Expose(serialize = false)
 	@Getter
 	@SerializedName("created")
 	private ZonedDateTime created;
 
-	/**
-	 * Lowercase class name
-	 */
 	@Getter
 	private transient String className;
 
-	/**
-	 * {@link Collection} de atributos que tiveram seus valores alterados.
-	 */
 	private transient final Map<String, Object> filters = new HashMap<>();
 
 	public ApiModel() {
@@ -56,18 +44,12 @@ abstract class ApiModel<PK extends Serializable> {
 		this.created = other.created;
 	}
 
-	/**
-	 * Valida se o atributo {@link #id} foi preenchido.
-	 */
 	protected void validateId() {
 		if (getId() == null) {
 			throw new IllegalArgumentException("The Object ID must be set in order to use this method.");
 		}
 	}
 
-	/**
-	 * Valida se o atributo {@link #id} foi preenchido.
-	 */
 	protected void validateIdFilters() {
 		if (filters == null || filters.isEmpty()) {
 			throw new IllegalArgumentException("No filter criteria defined.");
@@ -78,23 +60,10 @@ abstract class ApiModel<PK extends Serializable> {
 		filters.put(query, value);
 	}
 
-	/**
-	 * Refresh model state
-	 *
-	 * @return A representação atualizada do estado do modelo
-	 * @throws ApiException
-	 */
 	protected JsonObject refreshModel() throws ApiException {
 		return get(this.id);
 	}
 
-	/**
-	 * Gets a model by it's ID.
-	 *
-	 * @param id Model ID
-	 * @return Model state
-	 * @throws ApiException
-	 */
 	protected JsonObject get(final PK id) throws ApiException {
 		validateId();
 		return new ApiRequest(HttpMethod.GET, String.format("/%s/%s", className, id)).execute();
@@ -123,11 +92,6 @@ abstract class ApiModel<PK extends Serializable> {
 		}
 	}
 
-	/**
-	 * @param page
-	 * @return
-	 * @throws ApiException
-	 */
 	protected JsonArray next(Integer page) throws ApiException {
 		if (null == page || 0 >= page) {
 			page = 1;

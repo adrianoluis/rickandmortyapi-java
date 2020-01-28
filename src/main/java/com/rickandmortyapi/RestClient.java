@@ -8,11 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 public class RestClient {
@@ -80,13 +78,8 @@ public class RestClient {
 
 			try {
 				final UriBuilder builder = UriBuilder.fromPath(this.url);
-
-				if (method.equalsIgnoreCase(HttpMethod.GET)) {
-
-					for (Map.Entry<String, Object> entry : this.parameters.entrySet()) {
-						builder.queryParam(entry.getKey(), entry.getValue());
-					}
-
+				for (Map.Entry<String, Object> entry : this.parameters.entrySet()) {
+					builder.queryParam(entry.getKey(), entry.getValue());
 				}
 
 				httpClient = (HttpsURLConnection) builder
@@ -98,13 +91,10 @@ public class RestClient {
 				httpClient.setDoOutput(false);
 
 				if (headers.size() > 0) {
-
 					for (Map.Entry<String, String> entry : headers.entrySet()) {
 						httpClient.addRequestProperty(entry.getKey(), entry.getValue());
 					}
-
 				}
-
 			} catch (Exception e) {
 				throw ApiException.buildWithError(e);
 			}
@@ -117,27 +107,7 @@ public class RestClient {
 
 		try {
 			LOGGER.trace("{} {}", httpClient.getRequestMethod(), httpClient.getURL().toString());
-
-			if (method.equalsIgnoreCase(HttpMethod.POST) ||
-					method.equalsIgnoreCase(HttpMethod.PUT) ||
-					method.equalsIgnoreCase(HttpMethod.DELETE)) {
-				httpClient.setDoOutput(true);
-
-				if (parameters.size() > 1) {
-					final String payload = Jsons.provider().toJson(parameters);
-					final byte[] rawPayload = payload.getBytes();
-					httpClient.addRequestProperty("Content-Type", "application/json");
-
-					traceRequest(payload);
-
-					final OutputStream os = httpClient.getOutputStream();
-					os.write(rawPayload);
-					os.flush();
-				}
-
-			} else {
-				traceRequest();
-			}
+			traceRequest();
 
 			InputStream is;
 			try {
@@ -154,7 +124,6 @@ public class RestClient {
 			response = s.hasNext() ? s.next() : "";
 
 			traceResponse(response);
-
 			httpClient.disconnect();
 
 			return new ApiResponse(responseCode, Jsons.provider().fromJson(response, JsonElement.class));
