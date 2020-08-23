@@ -3,65 +3,63 @@ package com.rickandmortyapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static com.rickandmortyapi.util.Urls.asId;
 
-public class Character extends ApiModel<Integer> {
+public class Character extends ApiModel<Integer, Character> {
 
 	private final static long serialVersionUID = -6814865163305560069L;
 
 	@Getter
 	@Expose(serialize = false)
-	private String name;
+	String name;
 
 	@Getter
 	@Expose(serialize = false)
-	private Status status;
+	Status status;
 
 	@Getter
 	@Expose(serialize = false)
-	private String species;
+	String species;
 
 	@Getter
 	@Expose(serialize = false)
-	private String type;
+	String type;
 
 	@Getter
 	@Expose(serialize = false)
-	private Gender gender;
+	Gender gender;
 
 	@Getter
 	@Expose(serialize = false)
 	@SerializedName("origin")
-	private Location originLocation;
+	Location originLocation;
 
 	@Getter
 	@Expose(serialize = false)
 	@SerializedName("location")
-	private Location lastKnownLocation;
+	Location lastKnownLocation;
 
 	@Getter
 	@Expose(serialize = false)
-	private URL image;
+	URL image;
 
 	@Expose(serialize = false)
 	@SerializedName("episode")
 	private List<String> episodesUrl;
 
 	@Getter
-	private List<Episode> episodes;
+	List<Episode> episodes;
 
-	private void copy(Character other) {
+	void copy(final Character other) {
 		super.copy(other);
 		this.name = other.name;
 		this.status = other.status;
@@ -75,10 +73,11 @@ public class Character extends ApiModel<Integer> {
 	}
 
 	public Character() {
-		super();
+		super(Character.class);
 	}
 
 	public Character(int id) {
+		this();
 		setId(id);
 	}
 
@@ -107,30 +106,9 @@ public class Character extends ApiModel<Integer> {
 		return this;
 	}
 
-	public Character refresh() throws ApiException {
-		final Character other = Jsons.asObject(refreshModel(), Character.class);
-		copy(other);
-		return other;
-	}
-
-	public Collection<Character> get(Integer... ids) throws ApiException {
-		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
-	}
-
-	public Collection<Character> filter() {
-		return Jsons.asCollection(super.query(), TYPE_TOKEN);
-	}
-
-	public Collection<Character> filter(Integer page) {
-		return Jsons.asCollection(super.query(page), TYPE_TOKEN);
-	}
-
-	public Collection<Character> list() {
-		return Jsons.asCollection(super.next(1), TYPE_TOKEN);
-	}
-
-	public Collection<Character> list(Integer page) {
-		return Jsons.asCollection(super.next(page), TYPE_TOKEN);
+	@Override
+	Type getTypeToken() {
+		return new CollectionTypeToken().getType();
 	}
 
 	@PostConstruct
@@ -148,8 +126,6 @@ public class Character extends ApiModel<Integer> {
 
 	private static class CollectionTypeToken extends TypeToken<Collection<Character>> {
 	}
-
-	private static final Type TYPE_TOKEN = new CollectionTypeToken().getType();
 
 	public enum Gender {
 

@@ -52,7 +52,6 @@ public class RestClient {
 		this(method, url, parameters, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	public RestClient(final String method, final String url, Map<String, Object> parameters,
 					  Map<String, String> headers) throws ApiException {
 		this.method = method.toUpperCase();
@@ -102,8 +101,8 @@ public class RestClient {
 	}
 
 	public ApiResponse execute() throws ApiException {
-		int responseCode = -1;
-		String response = null;
+		int responseCode;
+		String response;
 
 		try {
 			LOGGER.trace("{} {}", httpClient.getRequestMethod(), httpClient.getURL().toString());
@@ -118,8 +117,7 @@ public class RestClient {
 				responseCode = httpClient.getResponseCode();
 			}
 
-			// @see http://web.archive.org/web/20140531042945/https://weblogs.java
-			// .net/blog/pat/archive/2004/10/stupid_scanner_1.html
+			// @see http://web.archive.org/web/20140531042945/https://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
 			final Scanner s = new Scanner(is, "UTF-8").useDelimiter("\\A");
 			response = s.hasNext() ? s.next() : "";
 
@@ -128,9 +126,6 @@ public class RestClient {
 
 			return new ApiResponse(responseCode, Jsons.provider().fromJson(response, JsonElement.class));
 		} catch (Exception e) {
-			if (e instanceof JsonSyntaxException) {
-				throw new ApiException(responseCode, url, method, response);
-			}
 			throw ApiException.buildWithError(e);
 		}
 	}

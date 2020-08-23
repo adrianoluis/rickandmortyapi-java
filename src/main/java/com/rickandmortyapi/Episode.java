@@ -16,35 +16,35 @@ import java.util.List;
 
 import static com.rickandmortyapi.util.Urls.asId;
 
-public class Episode extends ApiModel<Integer> {
+public class Episode extends ApiModel<Integer, Episode> {
 
 	private final static long serialVersionUID = 1761212523288968116L;
 
 	@Getter
 	@Expose(serialize = false)
-	private String name;
+	String name;
 
 	@Getter
 	@Expose(serialize = false)
 	@SerializedName("air_date")
-	private LocalDate showDate;
+	LocalDate showDate;
 
 	@Getter
 	@Expose(serialize = false)
 	@SerializedName("episode")
-	private String number;
+	String number;
 
 	@Expose(serialize = false)
-	private String url;
+	String url;
 
 	@Expose(serialize = false)
 	@SerializedName("characters")
 	private List<String> charactersUrl;
 
 	@Getter
-	private List<Character> characters;
+	List<Character> characters;
 
-	private void copy(Episode other) {
+	void copy(final Episode other) {
 		super.copy(other);
 		this.name = other.name;
 		this.showDate = other.showDate;
@@ -53,10 +53,11 @@ public class Episode extends ApiModel<Integer> {
 	}
 
 	public Episode() {
-		super();
+		super(Episode.class);
 	}
 
 	public Episode(int id) {
+		this();
 		setId(id);
 	}
 
@@ -68,32 +69,6 @@ public class Episode extends ApiModel<Integer> {
 	public Episode withNumber(String number) {
 		addFilter("episode", number);
 		return this;
-	}
-
-	public Episode refresh() throws ApiException {
-		final Episode other = Jsons.asObject(refreshModel(), Episode.class);
-		copy(other);
-		return other;
-	}
-
-	public Collection<Episode> get(Integer... ids) throws ApiException {
-		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
-	}
-
-	public Collection<Episode> filter() {
-		return Jsons.asCollection(super.query(), TYPE_TOKEN);
-	}
-
-	public Collection<Character> filter(Integer page) {
-		return Jsons.asCollection(super.query(page), TYPE_TOKEN);
-	}
-
-	public Collection<Episode> list() {
-		return Jsons.asCollection(super.next(1), TYPE_TOKEN);
-	}
-
-	public Collection<Episode> list(Integer page) {
-		return Jsons.asCollection(super.next(page), TYPE_TOKEN);
 	}
 
 	@PostConstruct
@@ -111,8 +86,11 @@ public class Episode extends ApiModel<Integer> {
 		url = null;
 	}
 
-	private static class CollectionTypeToken extends TypeToken<Collection<Episode>> {
+	@Override
+	Type getTypeToken() {
+		return new CollectionTypeToken().getType();
 	}
 
-	private static final Type TYPE_TOKEN = new CollectionTypeToken().getType();
+	private static class CollectionTypeToken extends TypeToken<Collection<Episode>> {
+	}
 }

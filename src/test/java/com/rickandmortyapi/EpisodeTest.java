@@ -17,7 +17,7 @@ public class EpisodeTest {
 	}
 
 	@Test
-	public void testGet_withIds5and10() throws Throwable {
+	public void testGet_withIds5and10() {
 		final Episode s01e10 = episode.get(5, 10).stream()
 				.reduce((first, second) -> second)
 				.orElse(null);
@@ -26,10 +26,17 @@ public class EpisodeTest {
 	}
 
 	@Test
-	public void testRefresh_withId1() throws Throwable {
+	public void testRefresh_withId1() {
 		episode.setId(1);
 		episode.refresh();
 		assertEquals("Pilot", episode.getName());
+	}
+
+	@Test
+	public void testGet_withInvalidId() {
+		episode.setId(-1);
+		episode.refresh();
+		assertNull(episode.getName());
 	}
 
 	@Test

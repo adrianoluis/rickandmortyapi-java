@@ -17,7 +17,7 @@ public class LocationTest {
 	}
 
 	@Test
-	public void testGet_withIds5and10() throws Throwable {
+	public void testGet_withIds5and10() {
 		final Location venzenulon7 = location.get(5, 10).stream()
 				.reduce((first, second) -> second)
 				.orElse(null);
@@ -26,14 +26,21 @@ public class LocationTest {
 	}
 
 	@Test
-	public void testRefresh_withId1() throws Throwable {
+	public void testRefresh_withId1() {
 		location.setId(1);
 		location.refresh();
 		assertEquals("Earth (C-137)", location.getName());
 	}
 
 	@Test
-	public void testFilter_withEarthPlanet() throws Throwable {
+	public void testGet_withInvalidId() {
+		location.setId(-1);
+		location.refresh();
+		assertNull(location.getName());
+	}
+
+	@Test
+	public void testFilter_withEarthPlanet() {
 		location.withName("Earth")
 				.withType("Planet")
 				.filter()
@@ -44,16 +51,15 @@ public class LocationTest {
 	}
 
 	@Test
-	public void testList_withPage2() throws Throwable {
+	public void testList_withPage2() {
 		final Collection<Location> locations = location.list(2);
 		assertFalse(locations.isEmpty());
 		assertEquals(20, locations.size());
 	}
 
 	@Test
-	public void testList_withPage999() throws Throwable {
+	public void testList_withPage999() {
 		final Collection<Location> locations = location.list(999);
 		assertTrue(locations.isEmpty());
-		assertEquals(0, locations.size());
 	}
 }

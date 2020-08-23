@@ -4,17 +4,26 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
 import javax.ws.rs.HttpMethod;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-abstract class ApiModel<PK extends Serializable> {
+abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
+
+	private transient Class<T> typeClass;
+
+	@Getter
+	private transient String className;
+
+	private transient final Map<String, Object> filters = new HashMap<>();
 
 	@Expose(serialize = false)
 	@Getter
@@ -25,22 +34,18 @@ abstract class ApiModel<PK extends Serializable> {
 	@Expose(serialize = false)
 	@Getter
 	@SerializedName("created")
-	private ZonedDateTime created;
+	ZonedDateTime created;
 
-	@Getter
-	private transient String className;
-
-	private transient final Map<String, Object> filters = new HashMap<>();
-
-	public ApiModel() {
-		className = getClass().getSimpleName().toLowerCase();
+	public ApiModel(Class<T> typeClass) {
+		this.className = getClass().getSimpleName().toLowerCase();
+		this.typeClass = typeClass;
 	}
 
 	void resetFilters() {
 		filters.clear();
 	}
 
-	void copy(final ApiModel<PK> other) {
+	void copy(final T other) {
 		this.created = other.created;
 	}
 
@@ -60,21 +65,25 @@ abstract class ApiModel<PK extends Serializable> {
 		filters.put(query, value);
 	}
 
-	protected JsonObject refreshModel() throws ApiException {
-		return get(this.id);
-	}
-
-	protected JsonObject get(final PK id) throws ApiException {
+	protected JsonObject get(final PK id) {
 		validateId();
+		try {
 		return new ApiRequest(HttpMethod.GET, String.format("/%s/%s", className, id)).execute();
+		} catch (ApiException e) {
+			return new JsonObject();
+		}
 	}
 
-	protected JsonArray get(List<PK> ids) throws ApiException {
+	protected JsonArray get(List<PK> ids) {
 		final String strIds = ids.stream()
 				.map(Objects::toString)
 				.collect(Collectors.joining(","));
-		final String path = String.format("/%s/%s", className, strIds);
-		return new ApiRequest(HttpMethod.GET, path).execute();
+		try {
+			final String path = String.format("/%s/%s", className, strIds);
+			return new ApiRequest(HttpMethod.GET, path).execute();
+		} catch (ApiException e) {
+			return new JsonArray();
+		}
 	}
 
 	protected JsonArray query() {
@@ -103,4 +112,32 @@ abstract class ApiModel<PK extends Serializable> {
 			return new JsonArray();
 		}
 	}
+
+	public T refresh() {
+		final T other = Jsons.asObject(get(id), typeClass);
+		copy(other);
+		return other;
+	}
+
+	public Collection<T> get(PK... ids) {
+		return Jsons.asCollection(get(Arrays.asList(ids)), getTypeToken());
+	}
+
+	public Collection<T> filter() {
+		return Jsons.asCollection(query(), getTypeToken());
+	}
+
+	public Collection<T> filter(Integer page) {
+		return Jsons.asCollection(query(page), getTypeToken());
+	}
+
+	public Collection<T> list() {
+		return Jsons.asCollection(next(1), getTypeToken());
+	}
+
+	public Collection<T> list(Integer page) {
+		return Jsons.asCollection(next(page), getTypeToken());
+	}
+
+	abstract Type getTypeToken();
 }
