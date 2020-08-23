@@ -80,26 +80,30 @@ public class Episode extends ApiModel<Integer> {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
 	}
 
-	public Collection<Episode> filter() throws ApiException {
+	public Collection<Episode> filter() {
 		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
-	public Collection<Episode> list() throws ApiException {
+	public Collection<Character> filter(Integer page) {
+		return Jsons.asCollection(super.query(page), TYPE_TOKEN);
+	}
+
+	public Collection<Episode> list() {
 		return Jsons.asCollection(super.next(1), TYPE_TOKEN);
 	}
 
-	public Collection<Episode> list(Integer page) throws ApiException {
+	public Collection<Episode> list(Integer page) {
 		return Jsons.asCollection(super.next(page), TYPE_TOKEN);
 	}
 
 	@PostConstruct
 	public void postConstruct() {
-		setId(asId(url, Integer::new));
+		setId(asId(url, Integer::parseInt));
 		if (null != charactersUrl && !charactersUrl.isEmpty()) {
 			characters = new ArrayList<>(charactersUrl.size());
 			for (String url : charactersUrl) {
 				final Character character = new Character();
-				character.setId(asId(url, Integer::new));
+				character.setId(asId(url, Integer::parseInt));
 				characters.add(character);
 			}
 			charactersUrl = null;

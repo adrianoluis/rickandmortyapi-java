@@ -82,26 +82,30 @@ public class Location extends ApiModel<Integer> {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
 	}
 
-	public Collection<Location> filter() throws ApiException {
+	public Collection<Location> filter() {
 		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
-	public Collection<Location> list() throws ApiException {
+	public Collection<Character> filter(Integer page) {
+		return Jsons.asCollection(super.query(page), TYPE_TOKEN);
+	}
+
+	public Collection<Location> list() {
 		return Jsons.asCollection(super.next(1), TYPE_TOKEN);
 	}
 
-	public Collection<Location> list(Integer page) throws ApiException {
+	public Collection<Location> list(Integer page) {
 		return Jsons.asCollection(super.next(page), TYPE_TOKEN);
 	}
 
 	@PostConstruct
 	public void postConstruct() {
-		setId(asId(url, Integer::new));
+		setId(asId(url, Integer::parseInt));
 		if (null != residentsUrl && !residentsUrl.isEmpty()) {
 			residents = new ArrayList<>(residentsUrl.size());
 			for (String url : residentsUrl) {
 				final Character character = new Character();
-				character.setId(asId(url, Integer::new));
+				character.setId(asId(url, Integer::parseInt));
 				residents.add(character);
 			}
 			residentsUrl = null;

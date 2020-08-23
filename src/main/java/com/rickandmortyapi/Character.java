@@ -117,15 +117,19 @@ public class Character extends ApiModel<Integer> {
 		return Jsons.asCollection(super.get(Arrays.asList(ids)), TYPE_TOKEN);
 	}
 
-	public Collection<Character> filter() throws ApiException {
+	public Collection<Character> filter() {
 		return Jsons.asCollection(super.query(), TYPE_TOKEN);
 	}
 
-	public Collection<Character> list() throws ApiException {
+	public Collection<Character> filter(Integer page) {
+		return Jsons.asCollection(super.query(page), TYPE_TOKEN);
+	}
+
+	public Collection<Character> list() {
 		return Jsons.asCollection(super.next(1), TYPE_TOKEN);
 	}
 
-	public Collection<Character> list(Integer page) throws ApiException {
+	public Collection<Character> list(Integer page) {
 		return Jsons.asCollection(super.next(page), TYPE_TOKEN);
 	}
 
@@ -135,7 +139,7 @@ public class Character extends ApiModel<Integer> {
 			episodes = new ArrayList<>(episodesUrl.size());
 			for (String url : episodesUrl) {
 				final Episode episode = new Episode();
-				episode.setId(asId(url, Integer::new));
+				episode.setId(asId(url, Integer::parseInt));
 				episodes.add(episode);
 			}
 			episodesUrl = null;

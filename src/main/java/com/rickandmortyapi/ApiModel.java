@@ -50,7 +50,7 @@ abstract class ApiModel<PK extends Serializable> {
 		}
 	}
 
-	protected void validateIdFilters() {
+	protected void validateFilters() {
 		if (filters == null || filters.isEmpty()) {
 			throw new IllegalArgumentException("No filter criteria defined.");
 		}
@@ -77,22 +77,16 @@ abstract class ApiModel<PK extends Serializable> {
 		return new ApiRequest(HttpMethod.GET, path).execute();
 	}
 
-	protected JsonArray query() throws ApiException {
-		validateIdFilters();
-		final String path = String.format("/%s", className);
-
-		try {
-			final ApiRequest request = new ApiRequest(HttpMethod.GET, path);
-			request.setParameters(filters);
-
-			final JsonObject response = request.execute();
-			return response.getAsJsonArray("results");
-		} catch (ApiException e) {
-			return new JsonArray();
-		}
+	protected JsonArray query() {
+		return query(null);
 	}
 
-	protected JsonArray next(Integer page) throws ApiException {
+	protected JsonArray query(Integer page) {
+		validateFilters();
+		return next(page);
+	}
+
+	protected JsonArray next(Integer page) {
 		if (null == page || 0 >= page) {
 			page = 1;
 		}

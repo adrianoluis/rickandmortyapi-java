@@ -33,7 +33,7 @@ public class EpisodeTest {
 	}
 
 	@Test
-	public void testFilter_withPilotS01E01() throws Throwable {
+	public void testFilter_withPilotS01E01() {
 		episode.withName("Pilot")
 				.withNumber("S01E01")
 				.filter()
@@ -44,16 +44,15 @@ public class EpisodeTest {
 	}
 
 	@Test
-	public void testList_withPage2() throws Throwable {
+	public void testList_withPage2() {
 		final Collection<Episode> episodes = episode.list(2);
 		assertFalse(episodes.isEmpty());
-		assertEquals(11, episodes.size());
+		assertEquals(20, episodes.size());
 	}
 
 	@Test
-	public void testList_withPage999() throws Throwable {
+	public void testList_withPage999() {
 		final Collection<Episode> episodes = episode.list(999);
 		assertTrue(episodes.isEmpty());
-		assertEquals(0, episodes.size());
 	}
 }
