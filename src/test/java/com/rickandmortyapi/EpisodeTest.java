@@ -18,11 +18,11 @@ public class EpisodeTest {
 
 	@Test
 	public void testGet_withIds5and10() {
-		final Episode s01e10 = episode.get(5, 10).stream()
-				.reduce((first, second) -> second)
-				.orElse(null);
-		assertNotNull(s01e10);
-		assertEquals("Close Rick-counters of the Rick Kind", s01e10.getName());
+		final Episode s01e05 = episode.get(5, 10)
+				.iterator()
+				.next();
+		assertNotNull(s01e05);
+		assertEquals("Meeseeks and Destroy", s01e05.getName());
 	}
 
 	@Test
@@ -41,13 +41,12 @@ public class EpisodeTest {
 
 	@Test
 	public void testFilter_withPilotS01E01() {
-		episode.withName("Pilot")
+		for (Episode episode : episode.withName("Pilot")
 				.withNumber("S01E01")
-				.filter()
-				.forEach(character -> {
-					assertTrue(character.getName().contains("Pilot"));
-					assertEquals("S01E01", character.getNumber());
-				});
+				.filter()) {
+			assertTrue(episode.getName().contains("Pilot"));
+			assertEquals("S01E01", episode.getNumber());
+		}
 	}
 
 	@Test

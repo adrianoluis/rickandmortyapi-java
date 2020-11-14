@@ -1,12 +1,12 @@
 package com.rickandmortyapi.util;
 
 import com.google.gson.*;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.lang.reflect.Type;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 class ZonedDateTimeTypeAdapter implements JsonDeserializer<ZonedDateTime> {
 

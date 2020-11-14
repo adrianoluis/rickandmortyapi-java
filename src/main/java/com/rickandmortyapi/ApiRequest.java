@@ -14,9 +14,9 @@ public class ApiRequest {
 
 	private final String method;
 
-	private Map<String, Object> parameters;
+	private final Map<String, String> headers;
 
-	private Map<String, String> headers;
+	private Map<String, Object> parameters;
 
 	public ApiRequest(String method, String path) {
 		this(method, path, null);
@@ -26,7 +26,7 @@ public class ApiRequest {
 		this.path = path;
 		this.method = method;
 		this.headers = headers;
-		this.parameters = new HashMap<>();
+		this.parameters = new HashMap<String, Object>();
 	}
 
 	public static String fullApiUrl(final String path) {

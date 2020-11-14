@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -19,11 +18,11 @@ public class CharacterTest {
 
 	@Test
 	public void testGet_withIds5and10() {
-		final Character alanRails = character.get(5, 10).stream()
-				.reduce((first, second) -> second)
-				.orElse(null);
-		assertNotNull(alanRails);
-		assertEquals("Alan Rails", alanRails.getName());
+		final Character jerrySmith = character.get(5, 10)
+				.iterator()
+				.next();
+		assertNotNull(jerrySmith);
+		assertEquals("Jerry Smith", jerrySmith.getName());
 	}
 
 	@Test
@@ -42,13 +41,12 @@ public class CharacterTest {
 
 	@Test
 	public void testFilter_withRickAlive() {
-		character.withName("rick")
+		for (Character rick : character.withName("rick")
 				.withStatus(Character.Status.ALIVE)
-				.filter()
-				.forEach(character -> {
-					assertTrue(character.getName().contains("Rick"));
-					assertEquals(Character.Status.ALIVE, character.getStatus());
-				});
+				.filter()) {
+			assertTrue(rick.getName().contains("Rick"));
+			assertEquals(Character.Status.ALIVE, rick.getStatus());
+		}
 	}
 
 	@Test
@@ -60,9 +58,9 @@ public class CharacterTest {
 
 	@Test
 	public void testFilter_withRick_withPage2() {
-		character.withName("rick")
-				.filter(3)
-				.forEach(character -> assertTrue(character.getName().contains("Rick")));
+		for (Character rick : character.withName("rick").filter(3)) {
+			assertTrue(rick.getName().contains("Rick"));
+		}
 	}
 
 	@Test

@@ -59,11 +59,11 @@ public class RestClient {
 		this.parameters = parameters;
 
 		if (null == headers) {
-			headers = new HashMap<>();
+			headers = new HashMap<String, String>();
 		}
 
 		if (null == this.parameters) {
-			this.parameters = new HashMap<>();
+			this.parameters = new HashMap<String, Object>();
 		}
 
 		headers.put("User-Agent", getUserAgent());

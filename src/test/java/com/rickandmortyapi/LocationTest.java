@@ -18,11 +18,11 @@ public class LocationTest {
 
 	@Test
 	public void testGet_withIds5and10() {
-		final Location venzenulon7 = location.get(5, 10).stream()
-				.reduce((first, second) -> second)
-				.orElse(null);
-		assertNotNull(venzenulon7);
-		assertEquals("Venzenulon 7", venzenulon7.getName());
+		final Location anatomyPark = location.get(5, 10)
+				.iterator()
+				.next();
+		assertNotNull(anatomyPark);
+		assertEquals("Anatomy Park", anatomyPark.getName());
 	}
 
 	@Test
@@ -41,13 +41,12 @@ public class LocationTest {
 
 	@Test
 	public void testFilter_withEarthPlanet() {
-		location.withName("Earth")
+		for (Location location : location.withName("Earth")
 				.withType("Planet")
-				.filter()
-				.forEach(character -> {
-					assertTrue(character.getName().contains("Earth"));
-					assertEquals("Planet", character.getType());
-				});
+				.filter()) {
+			assertTrue(location.getName().contains("Earth"));
+			assertEquals("Planet", location.getType());
+		}
 	}
 
 	@Test

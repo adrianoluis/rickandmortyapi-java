@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.rickandmortyapi.util.Urls.asId;
+import static java.lang.Integer.parseInt;
 
 public class Character extends ApiModel<Integer, Character> {
 
@@ -114,10 +115,10 @@ public class Character extends ApiModel<Integer, Character> {
 	@PostConstruct
 	public void postConstruct() {
 		if (null != episodesUrl && !episodesUrl.isEmpty()) {
-			episodes = new ArrayList<>(episodesUrl.size());
+			episodes = new ArrayList<Episode>(episodesUrl.size());
 			for (String url : episodesUrl) {
 				final Episode episode = new Episode();
-				episode.setId(asId(url, Integer::parseInt));
+				episode.setId(asId(url));
 				episodes.add(episode);
 			}
 			episodesUrl = null;

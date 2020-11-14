@@ -3,14 +3,12 @@ package com.rickandmortyapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
+import org.threeten.bp.LocalDate;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -73,12 +71,12 @@ public class Episode extends ApiModel<Integer, Episode> {
 
 	@PostConstruct
 	public void postConstruct() {
-		setId(asId(url, Integer::parseInt));
+		setId(asId(url));
 		if (null != charactersUrl && !charactersUrl.isEmpty()) {
-			characters = new ArrayList<>(charactersUrl.size());
+			characters = new ArrayList<Character>(charactersUrl.size());
 			for (String url : charactersUrl) {
 				final Character character = new Character();
-				character.setId(asId(url, Integer::parseInt));
+				character.setId(asId(url));
 				characters.add(character);
 			}
 			charactersUrl = null;

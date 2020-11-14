@@ -3,12 +3,15 @@ jdk:
   - oraclejdk11
   - oraclejdk12
   - oraclejdk13
+  - oraclejdk14
+  - openjdk7
   - openjdk8
   - openjdk9
   - openjdk10
   - openjdk11
   - openjdk12
   - openjdk13
+  - openjdk14
 branches:
   only:
     - master

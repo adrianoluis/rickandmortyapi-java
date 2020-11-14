@@ -75,12 +75,12 @@ public class Location extends ApiModel<Integer, Location> {
 
 	@PostConstruct
 	public void postConstruct() {
-		setId(asId(url, Integer::parseInt));
+		setId(asId(url));
 		if (null != residentsUrl && !residentsUrl.isEmpty()) {
-			residents = new ArrayList<>(residentsUrl.size());
+			residents = new ArrayList<Character>(residentsUrl.size());
 			for (String url : residentsUrl) {
 				final Character character = new Character();
-				character.setId(asId(url, Integer::parseInt));
+				character.setId(asId(url));
 				residents.add(character);
 			}
 			residentsUrl = null;

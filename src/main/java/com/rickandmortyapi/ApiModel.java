@@ -8,22 +8,21 @@ import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.threeten.bp.ZonedDateTime;
 
 import javax.ws.rs.HttpMethod;
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 
-	private transient Class<T> typeClass;
+	private final transient Class<T> typeClass;
 
 	@Getter
-	private transient String className;
+	private final transient String className;
 
-	private transient final Map<String, Object> filters = new HashMap<>();
+	private transient final Map<String, Object> filters = new HashMap<String, Object>();
 
 	@Expose(serialize = false)
 	@Getter
@@ -75,11 +74,15 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 	}
 
 	protected JsonArray get(List<PK> ids) {
-		final String strIds = ids.stream()
-				.map(Objects::toString)
-				.collect(Collectors.joining(","));
+		final StringBuilder strIds = new StringBuilder();
+		for (int i = 0; i < ids.size(); i++) {
+			strIds.append(ids.get(i).toString());
+			if (i != ids.size() - 1) {
+				strIds.append(",");
+			}
+		}
 		try {
-			final String path = String.format("/%s/%s", className, strIds);
+			final String path = String.format("/%s/%s", className, strIds.toString());
 			return new ApiRequest(HttpMethod.GET, path).execute();
 		} catch (ApiException e) {
 			return new JsonArray();
