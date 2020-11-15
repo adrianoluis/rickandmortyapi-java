@@ -1,6 +1,7 @@
 package com.rickandmortyapi;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -97,7 +98,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 		validateFilters();
 		return next(page);
 	}
-	
+
 	protected JsonArray queryAll() {
 		validateFilters();
 		return nextAll();
@@ -120,7 +121,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 			return new JsonArray();
 		}
 	}
-	
+
 	protected JsonArray nextAll() {
 		Integer page = 1;
 
@@ -166,7 +167,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 	public Collection<T> filter(Integer page) {
 		return Jsons.asCollection(query(page), getTypeToken());
 	}
-	
+
 	public Collection<T> filterAll() {
 		return Jsons.asCollection(queryAll(), getTypeToken());
 	}
@@ -178,7 +179,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 	public Collection<T> list(Integer page) {
 		return Jsons.asCollection(next(page), getTypeToken());
 	}
-	
+
 	public Collection<T> listAll() {
 		return Jsons.asCollection(nextAll(), getTypeToken());
 	}
