@@ -89,13 +89,42 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 		}
 	}
 
-	protected JsonArray query() {
-		return query(null);
+	protected JsonArray queryAll() {
+		validateFilters();
+		return nextAll();
 	}
 
 	protected JsonArray query(Integer page) {
 		validateFilters();
 		return next(page);
+	}
+	
+	protected JsonArray nextAll() {
+		Integer page = 1;
+
+		JsonArray fullResponse = new JsonArray();
+		JsonElement indicator = null;
+
+		do {
+			filters.put("page", page);
+
+			try {
+				final ApiRequest request = new ApiRequest(HttpMethod.GET, String.format("/%s", className));
+				request.setParameters(filters);
+
+				final JsonObject response = request.execute();
+
+				fullResponse.addAll(response.getAsJsonArray("results"));
+				indicator = response.get("info").getAsJsonObject().get("next");
+
+				page++;
+
+			} catch (ApiException e) {
+				return new JsonArray();
+			}
+		} while (!indicator.isJsonNull());
+
+		return fullResponse;
 	}
 
 	protected JsonArray next(Integer page) {
@@ -127,7 +156,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 	}
 
 	public Collection<T> filter() {
-		return Jsons.asCollection(query(), getTypeToken());
+		return Jsons.asCollection(queryAll(), getTypeToken());
 	}
 
 	public Collection<T> filter(Integer page) {
@@ -135,7 +164,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 	}
 
 	public Collection<T> list() {
-		return Jsons.asCollection(next(1), getTypeToken());
+		return Jsons.asCollection(nextAll(), getTypeToken());
 	}
 
 	public Collection<T> list(Integer page) {
