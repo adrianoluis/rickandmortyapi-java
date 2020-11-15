@@ -31,7 +31,7 @@ Simply put the following snippet into your proper build config:
 <dependency>
     <groupId>net.adrianoluis</groupId>
     <artifactId>rickandmortyapi-java</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -46,21 +46,21 @@ repositories {
 
 ##### Dependency
 ```
-compile 'net.adrianoluis:rickandmortyapi-java:1.1.0'
+compile 'net.adrianoluis:rickandmortyapi-java:1.1.1'
 ```
 
 #### Apache Buildr
 
 ##### Dependency
 ```
-'net.adrianoluis:rickandmortyapi-java:jar:1.1.0'
+'net.adrianoluis:rickandmortyapi-java:jar:1.1.1'
 ```
 
 #### Apache Ivy
 
 ##### Dependency
 ```
-<dependency org="net.adrianoluis" name="rickandmortyapi-java" rev="1.1.0">
+<dependency org="net.adrianoluis" name="rickandmortyapi-java" rev="1.1.1">
     <artifact name="rickandmortyapi-java" type="jar" />
 </dependency>
 ```
@@ -70,7 +70,7 @@ compile 'net.adrianoluis:rickandmortyapi-java:1.1.0'
 ##### Dependency
 ```
 @Grapes(
-  @Grab(group='net.adrianoluis', module='rickandmortyapi-java', version='1.1.0')
+  @Grab(group='net.adrianoluis', module='rickandmortyapi-java', version='1.1.1')
 )
 ```
 
@@ -78,14 +78,14 @@ compile 'net.adrianoluis:rickandmortyapi-java:1.1.0'
 
 ##### Dependency
 ```
-libraryDependencies += "net.adrianoluis" % "rickandmortyapi-java" % "1.1.0"
+libraryDependencies += "net.adrianoluis" % "rickandmortyapi-java" % "1.1.1"
 ```
 
 #### Leiningen
 
 ##### Dependency
 ```
-[net.adrianoluis/rickandmortyapi-java "1.1.0"]
+[net.adrianoluis/rickandmortyapi-java "1.1.1"]
 ```
 
 ## License

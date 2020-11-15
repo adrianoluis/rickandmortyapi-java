@@ -19,7 +19,7 @@
 
 	<groupId>net.adrianoluis</groupId>
 	<artifactId>rickandmortyapi-java</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 
 	<properties>
 		<!-- Explicitly declaring the source encoding eliminates the following message: -->
