@@ -16,14 +16,14 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.*;
 
-abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
+abstract class ApiModel<PK extends Serializable, T extends ApiModel<PK, T>> {
 
 	private final transient Class<T> typeClass;
 
 	@Getter
 	private final transient String className;
 
-	private transient final Map<String, Object> filters = new HashMap<String, Object>();
+	private transient final Map<String, Object> filters = new HashMap<>();
 
 	@Expose(serialize = false)
 	@Getter
@@ -83,7 +83,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 			}
 		}
 		try {
-			final String path = String.format("/%s/%s", className, strIds.toString());
+			final String path = String.format("/%s/%s", className, strIds);
 			return new ApiRequest(HttpMethod.GET, path).execute();
 		} catch (ApiException e) {
 			return new JsonArray();
@@ -126,7 +126,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 		Integer page = 1;
 
 		JsonArray fullResponse = new JsonArray();
-		JsonElement indicator = null;
+		JsonElement indicator;
 
 		do {
 			filters.put("page", page);
@@ -156,7 +156,8 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel> {
 		return other;
 	}
 
-	public Collection<T> get(PK... ids) {
+	@SafeVarargs
+	public final Collection<T> get(PK... ids) {
 		return Jsons.asCollection(get(Arrays.asList(ids)), getTypeToken());
 	}
 

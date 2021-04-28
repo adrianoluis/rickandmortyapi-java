@@ -27,7 +27,7 @@ public class CharacterTest {
 
 	@Test
 	public void testRefresh_withId1() {
-		character.setId(1);
+		character = new Character(1);
 		character.refresh();
 		assertEquals("Rick Sanchez", character.getName());
 	}
@@ -58,7 +58,7 @@ public class CharacterTest {
 
 	@Test
 	public void testFilter_withRick_withPage2() {
-		for (Character rick : character.withName("rick").filter(3)) {
+		for (Character rick : character.withName("rick").filter(2)) {
 			assertTrue(rick.getName().contains("Rick"));
 		}
 	}

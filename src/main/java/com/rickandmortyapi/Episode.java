@@ -73,7 +73,7 @@ public class Episode extends ApiModel<Integer, Episode> {
 	public void postConstruct() {
 		setId(asId(url));
 		if (null != charactersUrl && !charactersUrl.isEmpty()) {
-			characters = new ArrayList<Character>(charactersUrl.size());
+			characters = new ArrayList<>(charactersUrl.size());
 			for (String url : charactersUrl) {
 				final Character character = new Character();
 				character.setId(asId(url));

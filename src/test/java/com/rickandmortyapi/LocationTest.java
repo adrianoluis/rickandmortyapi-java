@@ -27,7 +27,7 @@ public class LocationTest {
 
 	@Test
 	public void testRefresh_withId1() {
-		location.setId(1);
+		location = new Location(1);
 		location.refresh();
 		assertEquals("Earth (C-137)", location.getName());
 	}

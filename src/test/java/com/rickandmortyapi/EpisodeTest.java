@@ -27,7 +27,7 @@ public class EpisodeTest {
 
 	@Test
 	public void testRefresh_withId1() {
-		episode.setId(1);
+		episode = new Episode(1);
 		episode.refresh();
 		assertEquals("Pilot", episode.getName());
 	}

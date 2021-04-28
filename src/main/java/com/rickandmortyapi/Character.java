@@ -115,7 +115,7 @@ public class Character extends ApiModel<Integer, Character> {
 	@PostConstruct
 	public void postConstruct() {
 		if (null != episodesUrl && !episodesUrl.isEmpty()) {
-			episodes = new ArrayList<Episode>(episodesUrl.size());
+			episodes = new ArrayList<>(episodesUrl.size());
 			for (String url : episodesUrl) {
 				final Episode episode = new Episode();
 				episode.setId(asId(url));

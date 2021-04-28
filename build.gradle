@@ -1,0 +1,71 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+
+	id 'io.freefair.lombok' version '6.0.0-m2'
+	id 'net.saliman.cobertura' version '4.0.0'
+	id 'com.github.kt3k.coveralls' version '2.12.0'
+}
+
+ext {
+	gsonVersion = '2.8.6'
+	guavaVersion = '30.0-jre'
+	jerseyVersion = '2.23.1'
+	slf4jVersion = '1.7.25'
+	junitVersion = '4.13.1'
+	threetenbpVersion = '1.5.0'
+}
+
+group = 'net.adrianoluis'
+version = '1.1.2'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "com.google.code.gson:gson:$gsonVersion"
+	implementation "com.google.guava:guava:$guavaVersion"
+	implementation "org.threeten:threetenbp:$threetenbpVersion"
+	implementation "org.slf4j:slf4j-api:$slf4jVersion"
+	implementation("org.slf4j:slf4j-log4j12:$slf4jVersion") { transitive = true }
+	implementation("org.glassfish.jersey.core:jersey-common:$jerseyVersion") { transitive = true }
+
+	testImplementation "junit:junit:$junitVersion"
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_7
+	targetCompatibility = JavaVersion.VERSION_1_7
+
+	withSourcesJar()
+	withJavadocJar()
+}
+
+cobertura {
+	coverageFormats = ['html', 'xml']
+}
+
+gradle.projectsEvaluated {
+	tasks.withType(JavaCompile) {
+		options.compilerArgs << '-Xlint:all' << '-Xlint:-serial' << '-Xlint:-finally'
+	}
+}
+
+publishing {
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = "https://maven.pkg.github.com/adrianoluis/rickandmortyapi-java"
+			credentials {
+				username = System.getenv("GITHUB_ACTOR")
+				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
+		publications {
+			gpr(MavenPublication) {
+				from(components.java)
+			}
+		}
+	}
+}
