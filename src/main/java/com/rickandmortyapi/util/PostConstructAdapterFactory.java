@@ -37,7 +37,7 @@ public class PostConstructAdapterFactory implements TypeAdapterFactory {
 				if (m.isAnnotationPresent(PostConstruct.class)) {
 					m.setAccessible(true);
 					TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
-					return new PostConstructAdapter<T>(delegate, m);
+					return new PostConstructAdapter<>(delegate, m);
 				}
 			}
 		}
@@ -62,7 +62,8 @@ public class PostConstructAdapterFactory implements TypeAdapterFactory {
 				} catch (IllegalAccessException e) {
 					throw new AssertionError();
 				} catch (InvocationTargetException e) {
-					if (e.getCause() instanceof RuntimeException) throw (RuntimeException) e.getCause();
+					if (e.getCause() instanceof RuntimeException)
+						throw (RuntimeException) e.getCause();
 					throw new RuntimeException(e.getCause());
 				}
 			}

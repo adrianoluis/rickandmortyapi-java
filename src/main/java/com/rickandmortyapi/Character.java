@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.rickandmortyapi.util.Urls.asId;
-import static java.lang.Integer.parseInt;
 
 public class Character extends ApiModel<Integer, Character> {
 

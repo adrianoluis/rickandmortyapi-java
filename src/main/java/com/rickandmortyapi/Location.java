@@ -3,13 +3,11 @@ package com.rickandmortyapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

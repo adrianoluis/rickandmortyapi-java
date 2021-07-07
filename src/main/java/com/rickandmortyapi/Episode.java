@@ -4,10 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
-import org.threeten.bp.LocalDate;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

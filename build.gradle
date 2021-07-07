@@ -8,12 +8,11 @@ plugins {
 }
 
 ext {
-	gsonVersion = '2.8.6'
-	guavaVersion = '30.0-jre'
-	jerseyVersion = '2.23.1'
-	slf4jVersion = '1.7.25'
+	gsonVersion = '2.8.7'
+	guavaVersion = '30.1.1-jre'
+	jerseyVersion = '2.34'
+	slf4jVersion = '1.7.31'
 	junitVersion = '4.13.1'
-	threetenbpVersion = '1.5.0'
 }
 
 group = 'net.adrianoluis'
@@ -26,7 +25,6 @@ repositories {
 dependencies {
 	implementation "com.google.code.gson:gson:$gsonVersion"
 	implementation "com.google.guava:guava:$guavaVersion"
-	implementation "org.threeten:threetenbp:$threetenbpVersion"
 	implementation "org.slf4j:slf4j-api:$slf4jVersion"
 	implementation("org.slf4j:slf4j-log4j12:$slf4jVersion") { transitive = true }
 	implementation("org.glassfish.jersey.core:jersey-common:$jerseyVersion") { transitive = true }
@@ -35,8 +33,8 @@ dependencies {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_7
-	targetCompatibility = JavaVersion.VERSION_1_7
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 
 	withSourcesJar()
 	withJavadocJar()

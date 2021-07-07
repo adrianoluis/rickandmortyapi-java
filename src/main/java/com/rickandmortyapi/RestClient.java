@@ -2,7 +2,6 @@ package com.rickandmortyapi;
 
 import com.google.common.base.Strings;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
 import com.rickandmortyapi.util.Jsons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

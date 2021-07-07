@@ -9,14 +9,14 @@ import com.rickandmortyapi.util.Jsons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.threeten.bp.ZonedDateTime;
 
 import javax.ws.rs.HttpMethod;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.time.ZonedDateTime;
 import java.util.*;
 
-abstract class ApiModel<PK extends Serializable, T extends ApiModel<PK, T>> {
+abstract class ApiModel<PK extends Serializable, T extends ApiModel<PK, T>> implements Serializable {
 
 	private final transient Class<T> typeClass;
 
@@ -68,7 +68,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel<PK, T>> {
 	protected JsonObject get(final PK id) {
 		validateId();
 		try {
-		return new ApiRequest(HttpMethod.GET, String.format("/%s/%s", className, id)).execute();
+			return new ApiRequest(HttpMethod.GET, String.format("/%s/%s", className, id)).execute();
 		} catch (ApiException e) {
 			return new JsonObject();
 		}
@@ -157,6 +157,7 @@ abstract class ApiModel<PK extends Serializable, T extends ApiModel<PK, T>> {
 	}
 
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public final Collection<T> get(PK... ids) {
 		return Jsons.asCollection(get(Arrays.asList(ids)), getTypeToken());
 	}
