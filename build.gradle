@@ -33,8 +33,8 @@ dependencies {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
 
 	withSourcesJar()
 	withJavadocJar()
@@ -56,8 +56,8 @@ publishing {
 			name = "GitHubPackages"
 			url = "https://maven.pkg.github.com/adrianoluis/rickandmortyapi-java"
 			credentials {
-				username = System.getenv("GITHUB_ACTOR")
-				password = System.getenv("GITHUB_TOKEN")
+				username = System.getenv("GH_USERNAME")
+				password = System.getenv("GH_TOKEN")
 			}
 		}
 		publications {
