@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'maven-publish'
 
 	id 'io.freefair.lombok' version '6.0.0-m2'
@@ -40,13 +41,20 @@ java {
 	withJavadocJar()
 }
 
-cobertura {
-	coverageFormats = ['html', 'xml']
+test {
+	finalizedBy jacocoTestReport
 }
 
-gradle.projectsEvaluated {
-	tasks.withType(JavaCompile) {
-		options.compilerArgs << '-Xlint:all' << '-Xlint:-serial' << '-Xlint:-finally'
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml {
+			enabled true
+			destination file("${buildDir}/reports/jacoco/report.xml")
+		}
+		html {
+			enabled true
+		}
 	}
 }
 
