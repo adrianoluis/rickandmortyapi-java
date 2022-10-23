@@ -4,8 +4,6 @@ plugins {
 	id 'maven-publish'
 
 	id 'io.freefair.lombok' version '6.0.0-m2'
-	id 'net.saliman.cobertura' version '4.0.0'
-	id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
 ext {
@@ -17,7 +15,7 @@ ext {
 }
 
 group = 'net.adrianoluis'
-version = '1.1.2'
+version = '1.1.3'
 
 repositories {
 	mavenCentral()
@@ -43,29 +41,27 @@ java {
 
 test {
 	finalizedBy jacocoTestReport
+	reports {
+		html { enabled false }
+	}
 }
 
 jacocoTestReport {
 	dependsOn test
 	reports {
-		xml {
-			enabled true
-			destination file("${buildDir}/reports/jacoco/report.xml")
-		}
-		html {
-			enabled true
-		}
+		xml { enabled true }
+		html { enabled false }
 	}
 }
 
 publishing {
 	repositories {
 		maven {
-			name = "GitHubPackages"
-			url = "https://maven.pkg.github.com/adrianoluis/rickandmortyapi-java"
+			name = 'GitHubPackages'
+			url = 'https://maven.pkg.github.com/adrianoluis/rickandmortyapi-java'
 			credentials {
-				username = System.getenv("GH_USERNAME")
-				password = System.getenv("GH_TOKEN")
+				username = System.getenv('GH_USERNAME')
+				password = System.getenv('GH_TOKEN')
 			}
 		}
 		publications {

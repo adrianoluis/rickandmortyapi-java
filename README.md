@@ -1,5 +1,5 @@
 # Rick and Morty API Java Client
-[![Build Status](https://github.com/adrianoluis/rickandmortyapi-java/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/adrianoluis/rickandmortyapi-java/actions) [![Coverage Status](https://codecov.io/gh/adrianoluis/rickandmortyapi-java/branch/main/graph/badge.svg?token=CVOIQ4OMVZ)](https://codecov.io/gh/adrianoluis/rickandmortyapi-java)
+[![Java CI with Gradle](https://github.com/adrianoluis/rickandmortyapi-java/actions/workflows/build.yml/badge.svg)](https://github.com/adrianoluis/rickandmortyapi-java/actions/workflows/build.yml) [![Coverage Status](https://codecov.io/gh/adrianoluis/rickandmortyapi-java/branch/main/graph/badge.svg?token=CVOIQ4OMVZ)](https://codecov.io/gh/adrianoluis/rickandmortyapi-java)
 
 Java Client for Rick And Morty knowledge base API: https://rickandmortyapi.com/
 

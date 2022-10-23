@@ -19,9 +19,9 @@ public class CharacterTest {
 	@Test
 	public void testGet_withIds5and10() {
 		final Character jerrySmith = character.get(5, 10)
-				.iterator()
-				.next();
-		assertNotNull(jerrySmith);
+				.stream()
+				.findFirst()
+				.orElseThrow();
 		assertEquals("Jerry Smith", jerrySmith.getName());
 	}
 
